@@ -34,3 +34,14 @@ def test_prop_balance():
     ds = gen_prop(n=100, seed=0)
     n_yes = sum(1 for p in ds if p.is_entailed)
     assert 40 <= n_yes <= 60
+    
+def test_prop_premises_always_satisfiable():
+    from grpo_reasoning.data.propositional import _premises_satisfiable
+    ds = gen_prop(n=50, seed=11)
+    for p in ds:
+        assert _premises_satisfiable(p.premises), f"Inconsistent premises: {p.premises}"
+
+def test_prop_target_not_in_premises():
+    ds = gen_prop(n=50, seed=13)
+    for p in ds:
+        assert p.target not in p.premises

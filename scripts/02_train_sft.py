@@ -4,6 +4,6 @@ from grpo_reasoning.models.loader import ModelConfig
 
 if __name__ == "__main__":
     model_cfg = ModelConfig(model_name="HuggingFaceTB/SmolLM-135M-Instruct")
-    sft_cfg = SFTConfig(epochs=3, batch_size=8, grad_accum_steps=2)
+    sft_cfg = SFTConfig(epochs=4, batch_size=8, grad_accum_steps=2)
     path = train_sft(sft_cfg, model_cfg)
     print(f"SFT adapter saved to {path}")

@@ -69,41 +69,79 @@ def _check_entailment(premises: tuple[str, ...], target: str) -> bool:
             continue
     return True
 
+def _premises_satisfiable(premises: tuple[str, ...]) -> bool:
+    """Check if there exists any assignment that satisfies all premises."""
+    for vals in product([False, True], repeat=len(VARS)):
+        assignment = dict(zip(VARS, vals))
+        try:
+            if all(_eval_clause(p, assignment) for p in premises):
+                return True
+        except KeyError:
+            continue
+    return False
 
-def generate_prop_problem(rng: random.Random) -> PropProblem:
-    """Generate one propositional problem with controlled difficulty."""
-    n_premises = rng.randint(2, 4)
-    used_vars = rng.sample(VARS, rng.randint(2, 4))
 
-    premises: list[str] = []
-    for _ in range(n_premises):
-        form = rng.choice(["atom", "neg", "implies", "and", "or"])
-        if form == "atom":
-            premises.append(rng.choice(used_vars))
-        elif form == "neg":
-            premises.append(f"not {rng.choice(used_vars)}")
+def _target_is_trivial(target: str) -> bool:
+    """Tautologies like 'P implies P' are uninformative."""
+    if " implies " in target:
+        a, b = target.split(" implies ")
+        if a.strip() == b.strip():
+            return True
+    return False
+
+
+def generate_prop_problem(rng: random.Random, max_attempts: int = 50) -> PropProblem:
+    """Generate one propositional problem with controlled difficulty.
+
+    Filters out:
+    - Inconsistent premise sets (everything entails, learning signal is bad)
+    - Tautological targets (P implies P)
+    - Problems where the target is literally in the premises (no reasoning needed)
+    """
+    for _ in range(max_attempts):
+        n_premises = rng.randint(2, 3)  # reduced from 2-4 to keep simpler
+        used_vars = rng.sample(VARS, rng.randint(2, 3))
+
+        premises: list[str] = []
+        for _ in range(n_premises):
+            form = rng.choice(["atom", "neg", "implies", "and", "or"])
+            if form == "atom":
+                premises.append(rng.choice(used_vars))
+            elif form == "neg":
+                premises.append(f"not {rng.choice(used_vars)}")
+            else:
+                a, b = rng.sample(used_vars, 2)
+                premises.append(f"{a} {form} {b}")
+
+        # Reject inconsistent premise sets
+        if not _premises_satisfiable(tuple(premises)):
+            continue
+
+        target_form = rng.choice(["atom", "neg", "implies"])
+        if target_form == "atom":
+            target = rng.choice(used_vars)
+        elif target_form == "neg":
+            target = f"not {rng.choice(used_vars)}"
         else:
             a, b = rng.sample(used_vars, 2)
-            premises.append(f"{a} {form} {b}")
+            target = f"{a} implies {b}"
 
-    # Target: either a variable, its negation, or a simple compound
-    target_form = rng.choice(["atom", "neg", "implies"])
-    if target_form == "atom":
-        target = rng.choice(used_vars)
-    elif target_form == "neg":
-        target = f"not {rng.choice(used_vars)}"
-    else:
-        a, b = rng.sample(used_vars, 2)
-        target = f"{a} implies {b}"
+        # Reject tautological or trivial targets
+        if _target_is_trivial(target):
+            continue
+        if target in premises:
+            continue
 
-    is_entailed = _check_entailment(tuple(premises), target)
-    return PropProblem(
-        premises=tuple(premises),
-        target=target,
-        is_entailed=is_entailed,
-        metadata={"n_premises": n_premises, "vars": used_vars},
-    )
+        is_entailed = _check_entailment(tuple(premises), target)
+        return PropProblem(
+            premises=tuple(premises),
+            target=target,
+            is_entailed=is_entailed,
+            metadata={"n_premises": n_premises, "vars": used_vars},
+        )
 
+    # Fallback if we somehow couldn't generate one — should be rare
+    raise RuntimeError("Could not generate a non-degenerate propositional problem")
 
 def generate_dataset(n: int, seed: int = 42) -> list[PropProblem]:
     rng = random.Random(seed)

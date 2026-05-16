@@ -21,13 +21,23 @@ from grpo_reasoning.data.propositional import generate_dataset as gen_prop
 
 CLIENT = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
-SYSTEM = """You write concise, step-by-step reasoning traces for logic problems.
+SYSTEM = """You write concise step-by-step reasoning for logic problems. Strict rules:
 
-Format requirements (strict):
-- Begin with <think> on its own line.
-- Inside <think>...</think>, lay out your reasoning in 2-5 short steps.
-- After </think>, output a single line: <answer>X</answer> where X is the final answer.
-- Do not output anything else.
+Format (no exceptions):
+<think>
+Step 1: [one short sentence — state what's given]
+Step 2: [one short sentence — make a single inference]
+Step 3: [one short sentence — state the conclusion]
+</think>
+<answer>X</answer>
+
+Constraints:
+- Use 2-4 numbered steps. Never more than 4.
+- Each step must say something NEW. Do not restate previous steps.
+- Do not write "Therefore X. Therefore X." patterns.
+- The <answer> must be exactly one word matching the expected answer.
+- Do not write anything outside the tags.
+- Do not mention being told the answer.
 """
 
 USER_TEMPLATE = """Problem:
@@ -45,8 +55,8 @@ def make_cot(problem_text: str, answer: str) -> str:
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": USER_TEMPLATE.format(problem=problem_text, answer=answer)},
         ],
-        temperature=0.7,
-        max_tokens=400,
+        temperature=0.5,    # lower than before — less variance, tighter format
+        max_tokens=200,     # forces brevity
     )
     return resp.choices[0].message.content.strip()
 
@@ -82,11 +92,17 @@ ANSWER_RE = re.compile(r"<answer>(.*?)</answer>", re.DOTALL)
 THINK_RE = re.compile(r"<think>(.*?)</think>", re.DOTALL)
 
 def validate_example(completion: str, ground_truth: str) -> bool:
-    """Drop examples that don't match our strict format or have wrong answer."""
     think_match = THINK_RE.search(completion)
     ans_match = ANSWER_RE.search(completion)
     if not (think_match and ans_match):
         return False
     if ans_match.group(1).strip().lower() != ground_truth.lower():
+        return False
+    # NEW: reject overly long traces (likely repetitive)
+    think_content = think_match.group(1)
+    n_steps = think_content.count("Step ")
+    if n_steps > 5 or n_steps < 2:
+        return False
+    if len(completion) > 800:  # rough length cap
         return False
     return True

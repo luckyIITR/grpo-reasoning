@@ -4,4 +4,5 @@ from grpo_reasoning.utils.seed import set_seed
 
 if __name__ == "__main__":
     set_seed(42)
-    build_sft_corpus(n_syll=120, n_prop=120, out_path="data/processed/sft.jsonl")
+    # Generate more, expecting to filter ~15-20%
+    build_sft_corpus(n_syll=200, n_prop=200, out_path="data/processed/sft.jsonl")
