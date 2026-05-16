@@ -1,0 +1,108 @@
+_wandb:
+    value:
+        cli_version: 0.27.0
+        e:
+            foqacwmr3dm1rlu5oo09hbqxeuf0jzol:
+                args:
+                    - --config-name=sft
+                codePath: scripts/02_train_sft.py
+                codePathLocal: scripts/02_train_sft.py
+                cpu_count: 64
+                cpu_count_logical: 128
+                cudaVersion: "12.8"
+                disk:
+                    /:
+                        total: "32212254720"
+                        used: "545419264"
+                email: luckykushwaha56@gmail.com
+                executable: /workspace/grpo-reasoning/.venv/bin/python
+                git:
+                    commit: 84f510194f84498f30b7e393f58db5db25862570
+                    remote: https://github.com/luckyIITR/grpo-reasoning.git
+                gpu: NVIDIA L4
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ada
+                      cudaCores: 7424
+                      memoryTotal: "24152899584"
+                      name: NVIDIA L4
+                      uuid: GPU-251907c9-6700-b125-56a1-fbd6cbeb472c
+                host: 1c4b251387c9
+                memory:
+                    total: "811427131392"
+                os: Linux-6.14.0-33-generic-x86_64-with-glibc2.39
+                program: /workspace/grpo-reasoning/scripts/02_train_sft.py
+                python: CPython 3.10.18
+                root: /workspace/grpo-reasoning
+                startedAt: "2026-05-16T16:36:23.714352Z"
+                writerId: foqacwmr3dm1rlu5oo09hbqxeuf0jzol
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 11
+                - 41
+                - 49
+                - 71
+                - 98
+            "2":
+                - 1
+                - 11
+                - 41
+                - 49
+                - 71
+                - 98
+            "3":
+                - 2
+                - 13
+                - 16
+                - 61
+            "4": 3.10.18
+            "5": 0.27.0
+            "6": 5.8.1
+            "12": 0.27.0
+            "13": linux-x86_64
+batch_size:
+    value: 8
+data_path:
+    value: data/processed/sft.jsonl
+dtype:
+    value: bfloat16
+epochs:
+    value: 4
+eval_every_steps:
+    value: 25
+grad_accum_steps:
+    value: 2
+lora_alpha:
+    value: 32
+lora_dropout:
+    value: 0.05
+lora_r:
+    value: 16
+lora_target_modules:
+    value:
+        - q_proj
+        - k_proj
+        - v_proj
+        - o_proj
+        - gate_proj
+        - up_proj
+        - down_proj
+lr:
+    value: 0.0002
+max_length:
+    value: 512
+model_name:
+    value: HuggingFaceTB/SmolLM-135M-Instruct
+output_dir:
+    value: checkpoints/sft
+seed:
+    value: 42
+use_lora:
+    value: true
+warmup_ratio:
+    value: 0.1
+weight_decay:
+    value: 0

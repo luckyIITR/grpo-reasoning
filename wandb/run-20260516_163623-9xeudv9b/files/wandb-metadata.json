@@ -1,0 +1,43 @@
+{
+  "os": "Linux-6.14.0-33-generic-x86_64-with-glibc2.39",
+  "python": "CPython 3.10.18",
+  "startedAt": "2026-05-16T16:36:23.714352Z",
+  "args": [
+    "--config-name=sft"
+  ],
+  "program": "/workspace/grpo-reasoning/scripts/02_train_sft.py",
+  "codePath": "scripts/02_train_sft.py",
+  "codePathLocal": "scripts/02_train_sft.py",
+  "git": {
+    "remote": "https://github.com/luckyIITR/grpo-reasoning.git",
+    "commit": "84f510194f84498f30b7e393f58db5db25862570"
+  },
+  "email": "luckykushwaha56@gmail.com",
+  "root": "/workspace/grpo-reasoning",
+  "host": "1c4b251387c9",
+  "executable": "/workspace/grpo-reasoning/.venv/bin/python",
+  "cpu_count": 64,
+  "cpu_count_logical": 128,
+  "gpu": "NVIDIA L4",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "32212254720",
+      "used": "545419264"
+    }
+  },
+  "memory": {
+    "total": "811427131392"
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA L4",
+      "memoryTotal": "24152899584",
+      "cudaCores": 7424,
+      "architecture": "Ada",
+      "uuid": "GPU-251907c9-6700-b125-56a1-fbd6cbeb472c"
+    }
+  ],
+  "cudaVersion": "12.8",
+  "writerId": "foqacwmr3dm1rlu5oo09hbqxeuf0jzol"
+}
