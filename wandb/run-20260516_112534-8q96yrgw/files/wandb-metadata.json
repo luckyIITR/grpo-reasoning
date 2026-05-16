@@ -1,0 +1,31 @@
+{
+  "os": "Linux-7.0.0-15-generic-x86_64-with-glibc2.43",
+  "python": "CPython 3.11.15",
+  "startedAt": "2026-05-16T11:25:34.764229Z",
+  "args": [
+    "--config-name=sft"
+  ],
+  "program": "/home/lucky/workspace/grpo-reasoning/scripts/02_train_sft.py",
+  "codePath": "scripts/02_train_sft.py",
+  "codePathLocal": "scripts/02_train_sft.py",
+  "git": {
+    "remote": "git@github.com:luckyIITR/grpo-reasoning.git",
+    "commit": "c390c711730f2dce213894649d51d084735384a7"
+  },
+  "email": "luckykushwaha56@gmail.com",
+  "root": "/home/lucky/workspace/grpo-reasoning",
+  "host": "server",
+  "executable": "/home/lucky/workspace/grpo-reasoning/.venv/bin/python",
+  "cpu_count": 4,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "105089261568",
+      "used": "40401108992"
+    }
+  },
+  "memory": {
+    "total": "16099065856"
+  },
+  "writerId": "4dv0ctmrq3za3yc48pudg81dddpw48ww"
+}
