@@ -1,0 +1,132 @@
+_wandb:
+    value:
+        cli_version: 0.27.0
+        e:
+            toxbfzdfexqxcnsre37q8v0jo6rsokv6:
+                codePath: scripts/03_train_grpo.py
+                codePathLocal: scripts/03_train_grpo.py
+                cpu_count: 64
+                cpu_count_logical: 128
+                cudaVersion: "12.8"
+                disk:
+                    /:
+                        total: "32212254720"
+                        used: "545513472"
+                email: luckykushwaha56@gmail.com
+                executable: /workspace/grpo-reasoning/.venv/bin/python
+                git:
+                    commit: d597f2e599b8b90d58f96d6fba63c3b21ef5af12
+                    remote: https://github.com/luckyIITR/grpo-reasoning.git
+                gpu: NVIDIA L4
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ada
+                      cudaCores: 7424
+                      memoryTotal: "24152899584"
+                      name: NVIDIA L4
+                      uuid: GPU-251907c9-6700-b125-56a1-fbd6cbeb472c
+                host: 1c4b251387c9
+                memory:
+                    total: "811427131392"
+                os: Linux-6.14.0-33-generic-x86_64-with-glibc2.39
+                program: /workspace/grpo-reasoning/scripts/03_train_grpo.py
+                python: CPython 3.10.18
+                root: /workspace/grpo-reasoning
+                startedAt: "2026-05-16T17:13:36.673789Z"
+                writerId: toxbfzdfexqxcnsre37q8v0jo6rsokv6
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 11
+                - 41
+                - 49
+                - 71
+                - 98
+            "2":
+                - 1
+                - 11
+                - 41
+                - 49
+                - 71
+                - 98
+            "3":
+                - 2
+                - 13
+                - 16
+                - 61
+            "4": 3.10.18
+            "5": 0.27.0
+            "6": 5.8.1
+            "12": 0.27.0
+            "13": linux-x86_64
+batch_size:
+    value: 8
+clip_eps:
+    value: 0.2
+correctness_weight:
+    value: 1
+dtype:
+    value: bfloat16
+eval_every:
+    value: 20
+format_weight:
+    value: 0.1
+group_size:
+    value: 8
+kl_coef:
+    value: 0.04
+lora_alpha:
+    value: 32
+lora_dropout:
+    value: 0.05
+lora_r:
+    value: 16
+lora_target_modules:
+    value:
+        - q_proj
+        - k_proj
+        - v_proj
+        - o_proj
+        - gate_proj
+        - up_proj
+        - down_proj
+lr:
+    value: 1e-06
+max_grad_norm:
+    value: 1
+max_new_tokens:
+    value: 200
+minibatch_size:
+    value: 8
+model_name:
+    value: HuggingFaceTB/SmolLM-135M-Instruct
+n_eval_prop:
+    value: 50
+n_eval_syll:
+    value: 50
+n_iterations:
+    value: 200
+n_train_problems:
+    value: 5000
+output_dir:
+    value: checkpoints/grpo
+ppo_epochs:
+    value: 2
+save_every:
+    value: 50
+seed:
+    value: 42
+sft_adapter_path:
+    value: checkpoints/sft
+temperature:
+    value: 1
+top_p:
+    value: 0.95
+use_lora:
+    value: true
+wandb_enabled:
+    value: true
+wandb_project:
+    value: grpo-reasoning

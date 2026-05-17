@@ -1,0 +1,40 @@
+{
+  "os": "Linux-6.14.0-33-generic-x86_64-with-glibc2.39",
+  "python": "CPython 3.10.18",
+  "startedAt": "2026-05-16T17:13:36.673789Z",
+  "program": "/workspace/grpo-reasoning/scripts/03_train_grpo.py",
+  "codePath": "scripts/03_train_grpo.py",
+  "codePathLocal": "scripts/03_train_grpo.py",
+  "git": {
+    "remote": "https://github.com/luckyIITR/grpo-reasoning.git",
+    "commit": "d597f2e599b8b90d58f96d6fba63c3b21ef5af12"
+  },
+  "email": "luckykushwaha56@gmail.com",
+  "root": "/workspace/grpo-reasoning",
+  "host": "1c4b251387c9",
+  "executable": "/workspace/grpo-reasoning/.venv/bin/python",
+  "cpu_count": 64,
+  "cpu_count_logical": 128,
+  "gpu": "NVIDIA L4",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "32212254720",
+      "used": "545513472"
+    }
+  },
+  "memory": {
+    "total": "811427131392"
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA L4",
+      "memoryTotal": "24152899584",
+      "cudaCores": 7424,
+      "architecture": "Ada",
+      "uuid": "GPU-251907c9-6700-b125-56a1-fbd6cbeb472c"
+    }
+  ],
+  "cudaVersion": "12.8",
+  "writerId": "toxbfzdfexqxcnsre37q8v0jo6rsokv6"
+}
