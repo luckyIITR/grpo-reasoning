@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 import torch
+from torch.nn.utils.rnn import pad_sequence
 from tqdm import tqdm
 
 from grpo_reasoning.data.syllogisms import generate_dataset as gen_syll
@@ -49,29 +50,35 @@ def evaluate(model, tokenizer, n_syll: int = 100, n_prop: int = 100,
     syll_total = prop_total = 0
     examples = []
 
-    for it in tqdm(items, desc="eval"):
-        prompt = format_chat(it["prompt"], tokenizer)
-        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    batch_size = 16  # tune for your GPU memory
+    for i in tqdm(range(0, len(items), batch_size), desc="eval"):
+        batch = items[i:i + batch_size]
+        prompts_formatted = [format_chat(it["prompt"], tokenizer) for it in batch]
+        inputs = tokenizer(
+            prompts_formatted, return_tensors="pt", padding=True, truncation=True,
+        ).to(model.device)
         out = model.generate(
             **inputs, max_new_tokens=max_new_tokens,
-            do_sample=False, temperature=1.0,
+            do_sample=False,
             pad_token_id=tokenizer.pad_token_id,
         )
-        gen = tokenizer.decode(out[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True)
-        pred = extract_answer(gen)
-
-        is_formatted = pred is not None
-        is_correct = is_formatted and pred == it["answer"].lower()
-        formatted += int(is_formatted)
-        correct += int(is_correct)
-        if it["task"] == "syllogism":
-            syll_total += 1; syll_correct += int(is_correct)
-        else:
-            prop_total += 1; prop_correct += int(is_correct)
-
-        if len(examples) < 5:
-            examples.append({"prompt": it["prompt"], "gold": it["answer"],
-                             "generation": gen, "predicted": pred})
+        # Decode just the new tokens for each item
+        prompt_lens = inputs["attention_mask"].sum(dim=1)
+        for j, it in enumerate(batch):
+            gen_ids = out[j, inputs["input_ids"].shape[1]:]
+            gen = tokenizer.decode(gen_ids, skip_special_tokens=True)
+            pred = extract_answer(gen)
+            is_formatted = pred is not None
+            is_correct = is_formatted and pred == it["answer"].lower()
+            formatted += int(is_formatted)
+            correct += int(is_correct)
+            if it["task"] == "syllogism":
+                syll_total += 1; syll_correct += int(is_correct)
+            else:
+                prop_total += 1; prop_correct += int(is_correct)
+            if len(examples) < 5:
+                examples.append({"prompt": it["prompt"], "gold": it["answer"],
+                                "generation": gen, "predicted": pred})
 
     return EvalResult(
         accuracy=correct / len(items),
